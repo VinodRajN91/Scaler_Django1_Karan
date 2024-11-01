@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 
-from library.models import Book
+from library.models import Book, Author
 from library.serializer import BookSerializer, AuthorSerializer
 
 
@@ -34,6 +34,7 @@ def create_author(request):
 
 # TODO: GET BOOK BY ID and return json response..
 
+
 @api_view(['GET'])
 def get_book_by_id(request, book_id):
     try:
@@ -43,5 +44,17 @@ def get_book_by_id(request, book_id):
 
     except Book.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+#http://localhost:8000/api/get_book_by_id
+
 
 # TODO: GET AUTHOR BY ID and return json response..
+@api_view(['GET'])
+def get_book_by_author(request, author_id):
+    try:
+        author = Author.objects.get(pk=author_id)
+        author_serializer = AuthorSerializer(author)
+        return Response(author_serializer.data, status=status.HTTP_200_OK)
+
+    except Author.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
